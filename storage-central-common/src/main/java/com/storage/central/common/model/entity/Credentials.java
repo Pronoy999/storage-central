@@ -1,4 +1,4 @@
-package com.storage.central.common.model;
+package com.storage.central.common.model.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
