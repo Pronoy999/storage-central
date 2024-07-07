@@ -1,7 +1,7 @@
 package com.storage.central.utils;
 
-import com.storage.central.exceptions.InvalidTokenException;
-import com.storage.central.model.JwtData;
+import com.storage.central.common.exceptions.InvalidTokenException;
+import com.storage.central.common.model.dto.JwtData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

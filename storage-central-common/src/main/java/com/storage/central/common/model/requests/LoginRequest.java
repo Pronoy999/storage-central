@@ -1,4 +1,4 @@
-package com.storage.central.model.requests;
+package com.storage.central.common.model.requests;
 
 import lombok.Data;
 

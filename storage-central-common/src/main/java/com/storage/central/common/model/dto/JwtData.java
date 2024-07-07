@@ -1,4 +1,4 @@
-package com.storage.central.model;
+package com.storage.central.common.model.dto;
 
 import lombok.Builder;
 import lombok.Data;

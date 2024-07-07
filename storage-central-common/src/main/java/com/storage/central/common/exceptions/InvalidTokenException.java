@@ -1,4 +1,4 @@
-package com.storage.central.exceptions;
+package com.storage.central.common.exceptions;
 
 public class InvalidTokenException extends RuntimeException {
     public InvalidTokenException(String message, Throwable cause) {
