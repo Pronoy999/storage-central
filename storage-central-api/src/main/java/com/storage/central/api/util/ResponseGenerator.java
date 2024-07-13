@@ -1,6 +1,7 @@
 package com.storage.central.api.util;
 
 import com.storage.central.common.model.responses.CreateUserResponse;
+import com.storage.central.common.model.responses.ErrorResponse;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,10 +29,13 @@ public class ResponseGenerator {
      * @return the ResponseEntity object with appropriate Error code.
      */
     public static ResponseEntity<?> generateFailureResponse(@NotNull final HttpStatus status, final String message) {
+        ErrorResponse response = new ErrorResponse();
+        response.setErrorCode(status.toString());
+        response.setErrorMessage(message);
         return switch (status) {
-            case BAD_REQUEST -> ResponseEntity.badRequest().body(message);
-            case INTERNAL_SERVER_ERROR -> ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(message);
-            default -> ResponseEntity.status(status).body(message);
+            case BAD_REQUEST -> ResponseEntity.badRequest().body(response);
+            case INTERNAL_SERVER_ERROR -> ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+            default -> ResponseEntity.status(status).body(response);
         };
     }
 }

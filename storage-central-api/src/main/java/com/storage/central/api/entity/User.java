@@ -1,4 +1,4 @@
-package com.storage.central.common.model.entity;
+package com.storage.central.api.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,9 +10,9 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
-@Entity
-@Data
+@Entity(name = "User")
 @Table(name = "tbl_user")
+@Data
 public class User {
     @Id
     @Column(name = "guid", nullable = false)

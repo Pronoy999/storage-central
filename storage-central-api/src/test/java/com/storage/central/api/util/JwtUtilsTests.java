@@ -9,25 +9,24 @@ import org.junit.jupiter.api.Test;
 import java.lang.reflect.Field;
 
 public class JwtUtilsTests {
+    private JwtUtils jwtUtils;
 
     @BeforeEach
     public void setUp() throws NoSuchFieldException, IllegalAccessException {
-        Field field = JwtUtils.class.getDeclaredField("key");
-        field.setAccessible(true);
-        field.set(null, "SECRET_KEYSECRET_KEYSECRET_KEYSECRET_KEYSECRET_KEY");
+        jwtUtils = new JwtUtils("SECRET_KEYSECRET_KEYSECRET_KEYSECRET_KEYSECRET_KEY");
     }
 
     @Test
     public void testGenerateJwt() {
-        String token = JwtUtils.createJwt("dummyEmail", "dummyGuid");
+        String token = jwtUtils.createJwt("dummyEmail", "dummyGuid");
         Assertions.assertNotNull(token);
-        JwtData jwtData = JwtUtils.verifyJwt(token);
+        JwtData jwtData = jwtUtils.verifyJwt(token);
         Assertions.assertEquals("dummyEmail", jwtData.getEmailId());
         Assertions.assertEquals("dummyGuid", jwtData.getGuid());
     }
 
     @Test
     public void testInvalidJWT() {
-        Assertions.assertThrows(InvalidTokenException.class, () -> JwtUtils.verifyJwt("INVALID_TOKEN"));
+        Assertions.assertThrows(InvalidTokenException.class, () -> jwtUtils.verifyJwt("INVALID_TOKEN"));
     }
 }

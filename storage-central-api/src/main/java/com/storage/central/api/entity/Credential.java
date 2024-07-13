@@ -1,4 +1,4 @@
-package com.storage.central.common.model.entity;
+package com.storage.central.api.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -8,26 +8,26 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "tbl_credentials")
 @Data
+@Table(name = "tbl_credentials", schema = "storage_central")
 public class Credential {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
     @Column(name = "user_guid", nullable = false)
     private String userGuid;
     @Column(name = "email_id", nullable = false)
     private String emailId;
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     private String password;
     @Column(name = "is_active", nullable = false)
-    private Boolean isActive;
+    private boolean isActive = true;
     @CreationTimestamp
+    @Column(name = "created")
     private LocalDateTime created;
     @UpdateTimestamp
+    @Column(name = "updated")
     private LocalDateTime updated;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_guid", referencedColumnName = "guid", insertable = false)
+    @ManyToOne
+    @JoinColumn(name = "user_guid", referencedColumnName = "guid", insertable = false, updatable = false)
     private User user;
 }

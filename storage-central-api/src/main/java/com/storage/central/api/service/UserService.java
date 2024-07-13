@@ -1,83 +1,99 @@
 package com.storage.central.api.service;
 
+import com.storage.central.api.entity.Credential;
+import com.storage.central.api.entity.User;
+import com.storage.central.api.repository.CredentialRepository;
+import com.storage.central.api.repository.UserRepository;
 import com.storage.central.api.util.JwtUtils;
 import com.storage.central.api.util.RequestValidator;
 import com.storage.central.api.util.ResponseGenerator;
 import com.storage.central.common.exceptions.InvalidRequestException;
-import com.storage.central.common.model.entity.Credential;
-import com.storage.central.common.model.entity.User;
 import com.storage.central.common.model.requests.CreateUserRequest;
-import com.storage.central.common.repository.CredentialsRepository;
-import com.storage.central.common.repository.UserRepository;
 import com.storage.central.common.util.GuidUtils;
 import jakarta.validation.constraints.NotNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service("userService")
 @Slf4j
+@RequiredArgsConstructor
+@ComponentScan(basePackages = {"com.storage.central.api"})
 public class UserService {
     private final UserRepository userRepository;
-    private final CredentialsRepository credentialsRepository;
-
-    public UserService(UserRepository userRepository, CredentialsRepository credentialsRepository) {
-        this.userRepository = userRepository;
-        this.credentialsRepository = credentialsRepository;
-    }
+    private final CredentialRepository credentialRepository;
+    private final JwtUtils jwtUtils;
 
     /**
-     * Method to register a user.
+     * Method to register the user.
      *
-     * @param request: the request object.
-     * @return the ResponseEntity with appropriate Body and HttpStatus code.
+     * @param request: The API Request.
+     * @return the Response Entity according to the response.
      */
     public ResponseEntity<?> registerUser(@NotNull final CreateUserRequest request) {
         try {
             RequestValidator.validateRegisterUserRequest(request);
+            if (checkIfUserAlreadyExists(request)) {
+                return ResponseGenerator.generateFailureResponse(HttpStatus.BAD_REQUEST, "User Already exists");
+            }
             String guid = GuidUtils.generateGuid();
-            String jwt = JwtUtils.createJwt(request.getEmailId(), guid);
+            String jwt = jwtUtils.createJwt(request.getEmailId(), guid);
             User user = createUser(request, guid);
-            Credential credential = createCredential(user, request.getEmailId(), request.getPassword());
+            Credential credential = createCredential(request, guid);
             userRepository.save(user);
-            credentialsRepository.save(credential);
+            credentialRepository.save(credential);
             return ResponseGenerator.generateUserRegisterResponse(guid, jwt);
         } catch (InvalidRequestException e) {
-            log.error("Invalid Request.", e);
+            log.error("Invalid request.", e);
             return ResponseGenerator.generateFailureResponse(HttpStatus.BAD_REQUEST, "Invalid Request.");
         }
     }
 
     /**
-     * Method to create the User object
+     * Method to check whether the user exists or not.
      *
-     * @param request: the request.
-     * @param guid:    the Guid generated.
+     * @param request: the API request.
+     * @return true, if the email id is not registered, else false.
+     */
+    private boolean checkIfUserAlreadyExists(@NotNull final CreateUserRequest request) {
+        List<Credential> users = credentialRepository.findByEmailId(request.getEmailId());
+        return !users.isEmpty();
+    }
+
+    /**
+     * Method to create the user object.
+     *
+     * @param request: the API Request.
+     * @param guid:    The guid generated for the user.
      * @return the {@link User} object.
      */
     private User createUser(@NotNull final CreateUserRequest request, @NotNull final String guid) {
         User user = new User();
+        user.setGuid(guid);
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
-        user.setGuid(guid);
         return user;
     }
 
     /**
-     * Method to create the Credential Object.
+     * Method to create the credential object.
      *
-     * @param user:     the {@link User} object.
-     * @param emailId:  the email id for the user.
-     * @param password: the password for the user.
+     * @param request: The API Request.
+     * @param guid:    The guid generated for the user.
      * @return the {@link Credential} object.
      */
-    private Credential createCredential(@NotNull final User user, @NotNull final String emailId, @NotNull final String password) {
+    private Credential createCredential(@NotNull final CreateUserRequest request, @NotNull final String guid) {
         Credential credential = new Credential();
-        credential.setUser(user);
-        credential.setEmailId(emailId);
-        credential.setPassword(password);
-        credential.setIsActive(true);
+        credential.setId(guid);
+        credential.setUserGuid(guid);
+        credential.setPassword(request.getPassword());
+        credential.setEmailId(request.getEmailId());
+        credential.setActive(true);
         return credential;
     }
 }

@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-@RequestMapping(path = Constants.USER_API_PATH)
+@RestController(value = "UserController")
+@RequestMapping(path = Constants.USER_REGISTER_API_PATH)
 @Slf4j
 public class UserController {
     private final UserService userService;
