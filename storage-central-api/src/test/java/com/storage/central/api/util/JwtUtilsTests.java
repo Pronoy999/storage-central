@@ -6,8 +6,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.Field;
-
 public class JwtUtilsTests {
     private JwtUtils jwtUtils;
 

@@ -9,6 +9,7 @@ import com.storage.central.api.util.RequestValidator;
 import com.storage.central.api.util.ResponseGenerator;
 import com.storage.central.common.exceptions.InvalidRequestException;
 import com.storage.central.common.model.requests.CreateUserRequest;
+import com.storage.central.common.model.requests.LoginUserRequest;
 import com.storage.central.common.util.GuidUtils;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -51,6 +52,27 @@ public class UserService {
         } catch (InvalidRequestException e) {
             log.error("Invalid request.", e);
             return ResponseGenerator.generateFailureResponse(HttpStatus.BAD_REQUEST, "Invalid Request.");
+        }
+    }
+
+    /**
+     * Method to login users.
+     *
+     * @param request: The API request.
+     * @return the GUID and JWT if valid credentials, else return 400.
+     */
+    public ResponseEntity<?> loginUsers(@NotNull final LoginUserRequest request) {
+        try {
+            RequestValidator.validateLoginUserRequest(request);
+            List<Credential> credentials = credentialRepository.findByEmailIdAndPasswordAndIsActive(request.getEmailId(), request.getPassword(), true);
+            if (credentials.isEmpty()) {
+                return ResponseGenerator.generateFailureResponse(HttpStatus.BAD_REQUEST, "Invalid Credentials!");
+            }
+            Credential credential = credentials.get(0);
+            String jwt = jwtUtils.createJwt(credential.getEmailId(), credential.getUserGuid());
+            return ResponseGenerator.generateUserRegisterResponse(credential.getUserGuid(), jwt);
+        } catch (InvalidRequestException e) {
+            return ResponseGenerator.generateFailureResponse(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 

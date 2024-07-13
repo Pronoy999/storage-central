@@ -2,6 +2,7 @@ package com.storage.central.api.util;
 
 import com.storage.central.common.exceptions.InvalidRequestException;
 import com.storage.central.common.model.requests.CreateUserRequest;
+import com.storage.central.common.model.requests.LoginUserRequest;
 import io.micrometer.common.util.StringUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,21 @@ public class RequestValidator {
         }
         List<String> fields = Arrays.asList(request.getEmailId(), request.getFirstName(), request.getLastName(), request.getPassword());
 
+        if (fields.stream().anyMatch(StringUtils::isEmpty)) {
+            throw new InvalidRequestException("Invalid Request");
+        }
+    }
+
+    /**
+     * Method to validate the user login request.
+     *
+     * @param request: the API request to be validated.
+     */
+    public static void validateLoginUserRequest(final LoginUserRequest request) {
+        if (Objects.isNull(request)) {
+            throw new InvalidRequestException("Empty Request");
+        }
+        List<String> fields = Arrays.asList(request.getEmailId(), request.getPassword());
         if (fields.stream().anyMatch(StringUtils::isEmpty)) {
             throw new InvalidRequestException("Invalid Request");
         }
