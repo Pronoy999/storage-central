@@ -1,0 +1,163 @@
+/* You can add global styles to this file, and also import other style files */
+@use "sass:meta";
+@import url("https://fonts.googleapis.com/css?family=Montserrat:400,800");
+@import 'ngx-toastr/toastr';
+
+@for $size from 0 through 4 {
+	.flexSize#{$size} {
+		flex: #{$size};
+	}
+}
+
+@for $size from 0 through 100 {
+	.w-#{$size} {
+		width: #{$size}#{"%"};
+	}
+
+	.m-#{$size} {
+		margin: #{$size}#{"px"};
+	}
+
+	.mt-#{$size} {
+		margin-top: #{$size}#{"px"};
+	}
+
+	.mr-#{$size} {
+		margin-right: #{$size}#{"px"};
+	}
+
+	.mb-#{$size} {
+		margin-bottom: #{$size}#{"px"};
+	}
+
+	.ml-#{$size} {
+		margin-left: #{$size}#{"px"};
+	}
+
+	.p-#{$size} {
+		padding: #{$size}#{"px"};
+	}
+
+	.pt-#{$size} {
+		padding-top: #{$size}#{"px"};
+	}
+
+	.pr-#{$size} {
+		padding-right: #{$size}#{"px"};
+	}
+
+	.pb-#{$size} {
+		padding-bottom: #{$size}#{"px"};
+	}
+
+	.pl-#{$size} {
+		padding-left: #{$size}#{"px"};
+	}
+
+	.fs-#{$size} {
+		font-size: #{$size}#{"px"};
+	}
+}
+
+@for $size from 0 through 200 {
+	.w-max#{$size} {
+		max-width: #{$size}#{"px"};
+	}
+
+	.w-min#{$size} {
+		min-width: #{$size}#{"px"};
+	}
+}
+
+* {
+	box-sizing: border-box;
+}
+
+html, body {
+	height: 100%;
+}
+
+body {
+	margin: 0;
+	font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.d-flex {
+	display: flex;
+}
+
+.align-center {
+	align-items: center;
+}
+
+.justify-center {
+	justify-content: center;
+}
+
+.pointer-highlight {
+	cursor: pointer;
+}
+
+.spacer {
+	flex: 1 1 auto;
+}
+
+.mat-mdc-form-field {
+	width: 100%;
+}
+
+.mat-mdc-form-field-error-wrapper {
+	padding: 0 !important;
+	font-size: 11px;
+}
+
+.mat-mdc-row:hover {
+	background: #eef0f7;
+	cursor: pointer;
+}
+
+//Message displayed for empty grid
+.empty-grid-container {
+    padding: 30px 0;
+    display: grid;
+    justify-content: center;
+    background: #FFFFFF;
+
+    & p {
+        font-size: 16px;
+        color: #666666;
+        text-align: center;
+    }
+}
+
+//ngx-Toaster
+.overlay-container {
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 100;
+}
+
+.overlay-container .toast-container.toast-top-right {
+    top: 10px;
+    right: 20px;
+}
+
+.overlay-container .toast-container .ng-toast {
+    position: relative;
+    overflow: hidden;
+    margin: 0 0 6px;
+    padding: 15px 1px 15px 1px;
+    width: 360px;
+    border-radius: 8px;
+    color: darkgray;
+    pointer-events: all;
+    cursor: pointer;
+    top: 70px;
+    right: 20px;
+}
+
+.overlay-container .toast-container .toast-title {
+	font-weight: 500!important;
+	font-size: 18px;
+}
