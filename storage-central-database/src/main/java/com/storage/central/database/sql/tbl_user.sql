@@ -1,4 +1,4 @@
-alter database storagecentral set search_path to storage_central;
+alter database storage_central set search_path to storage_central;
 CREATE TABLE if not exists storage_central.tbl_user
 (
     guid       varchar(200) NOT NULL PRIMARY KEY,

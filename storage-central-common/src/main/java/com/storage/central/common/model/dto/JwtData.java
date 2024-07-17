@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 @Builder
 public class JwtData {
-    private String email;
     private String guid;
+    private String emailId;
 }

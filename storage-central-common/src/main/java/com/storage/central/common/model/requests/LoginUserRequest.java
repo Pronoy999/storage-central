@@ -3,7 +3,7 @@ package com.storage.central.common.model.requests;
 import lombok.Data;
 
 @Data
-public class LoginRequest {
-    private String email;
+public class LoginUserRequest {
+    private String emailId;
     private String password;
 }
