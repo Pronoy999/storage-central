@@ -12,6 +12,7 @@
         <module>storage-central-common</module>
         <module>storage-central-api</module>
         <module>storage-central-database</module>
+        <module>storage-central-core</module>
     </modules>
 
     <properties>
