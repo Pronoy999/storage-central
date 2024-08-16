@@ -1,5 +1,7 @@
 package com.storage.central.api.util;
 
+import com.storage.central.common.model.requests.CreateFileRequest;
+import com.storage.central.common.model.responses.CreateFileResponse;
 import com.storage.central.common.model.responses.CreateUserResponse;
 import com.storage.central.common.model.responses.ErrorResponse;
 import jakarta.validation.constraints.NotNull;
@@ -22,6 +24,23 @@ public class ResponseGenerator {
     }
 
     /**
+     * Method to generate the response of successfully creating the file.
+     *
+     * @param fileName: the file Name
+     * @param filePath: the path of the file.
+     * @param fileId:   the guid for the file.
+     * @return the ResponseEntity with HTTP 200.
+     */
+    public static ResponseEntity<CreateFileResponse> generateSuccessfulFileCreationResponse(@NotNull final String fileName, @NotNull final String filePath, @NotNull final String fileId) {
+        CreateFileResponse response = new CreateFileResponse();
+        response.setCreated(true);
+        response.setFileName(fileName);
+        response.setFilePath(filePath);
+        response.setFileGuid(fileId);
+        return ResponseEntity.ok(response);
+    }
+
+    /**
      * Method to generate Failure Response.
      *
      * @param status:  the error message.
@@ -35,6 +54,7 @@ public class ResponseGenerator {
         return switch (status) {
             case BAD_REQUEST -> ResponseEntity.badRequest().body(response);
             case INTERNAL_SERVER_ERROR -> ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+            case UNAUTHORIZED -> ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
             default -> ResponseEntity.status(status).body(response);
         };
     }
